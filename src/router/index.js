@@ -6,6 +6,7 @@ import MessageList from '@/views/MessageList.vue'
 import MessageCreate from '@/views/MessageCreate.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import ProtectedView from '@/views/ProtectedView.vue'
+import NotFound from '@/views/NotFound.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/protected',
       name: 'protected',
       component: ProtectedView,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound
     },
   ],
 })
