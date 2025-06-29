@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HeaderComponent from './components/HeaderComponent.vue';
 import { useAuthStore } from './stores/auth';
+import PageTitle from './components/PageTitle.vue';
 
 const authStore = useAuthStore()
 authStore.initialize()
@@ -9,6 +10,7 @@ authStore.initialize()
 </script>
 
 <template>
+  <PageTitle title="My App"/>
   <HeaderComponent>
     <h1 class="text-[30px]">MyApp</h1>
     <nav class="text-[25px] flex justify-between w-[550px]">
@@ -19,7 +21,6 @@ authStore.initialize()
       <RouterLink to="/protected">Protected</RouterLink>
     </nav>
   </HeaderComponent>
-
   <main class="m-[15px]">
     <router-view v-slot="{ Component }">
       <keep-alive>
