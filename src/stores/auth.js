@@ -5,13 +5,35 @@ import axiosInstance from '@/services/axios'
 
 export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = ref(false)
-  // const user = ref(null)
+  const user = ref({
+    username: "",
+    email: "",
+  })
   const csrfToken = ref(null)
 
-  function initialize() {
+  async function initialize() {
     const { cookies } = useCookies()
     csrfToken.value = cookies.get("csrf_token")
-    isAuthenticated.value = (csrfToken.value != null)
+    try {
+      const response = await axiosInstance.get("/user", {
+        validateStatus: function (status) {
+          if (status == 401) {
+            isAuthenticated.value = false
+            user.value = {
+              username: "",
+              email: "",
+            }
+            return false
+          } else {
+            return true
+          }
+        }
+      })
+      user.value = response.data
+      isAuthenticated.value = true
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function login(credentials) {
@@ -26,5 +48,5 @@ export const useAuthStore = defineStore('auth', () => {
     return response
   }
 
-  return { isAuthenticated, csrfToken, initialize, login, logout }
+  return { user, isAuthenticated, csrfToken, initialize, login, logout }
 })
