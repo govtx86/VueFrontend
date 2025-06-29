@@ -5,6 +5,7 @@ import RegisterView from '@/views/RegisterView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import ProtectedView from '@/views/ProtectedView.vue'
 import NotFound from '@/views/NotFound.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,6 +34,9 @@ const router = createRouter({
       path: '/protected',
       name: 'protected',
       component: ProtectedView,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/:pathMatch(.*)*',
@@ -41,5 +45,14 @@ const router = createRouter({
     },
   ],
 })
+
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
+});
 
 export default router

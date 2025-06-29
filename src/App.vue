@@ -21,10 +21,6 @@ authStore.initialize()
   </HeaderComponent>
 
   <main class="m-[15px]">
-    <div>
-      <p v-if="authStore.csrfToken">{{ authStore.csrfToken }}</p>
-      <p v-else>Not CSRF Token!</p>
-    </div>
     <router-view v-slot="{ Component }">
       <keep-alive>
         <component :is="Component" />

@@ -15,24 +15,17 @@ export const useAuthStore = defineStore('auth', () => {
     const { cookies } = useCookies()
     csrfToken.value = cookies.get("csrf_token")
     try {
-      const response = await axiosInstance.get("/user", {
-        validateStatus: function (status) {
-          if (status == 401) {
-            isAuthenticated.value = false
-            user.value = {
-              username: "",
-              email: "",
-            }
-            return false
-          } else {
-            return true
-          }
-        }
-      })
+      const response = await axiosInstance.get("/user")
       user.value = response.data
       isAuthenticated.value = true
     } catch (error) {
-      console.log(error)
+      if (error.response.status == 401) {
+        isAuthenticated.value = false
+        user.value = {
+          username: "",
+          email: "",
+        }
+      }
     }
   }
 

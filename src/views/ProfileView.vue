@@ -20,6 +20,15 @@ const handleLogout = async () => {
 
 <template>
     This is the profile page <br>
+    <div v-if="!authStore.isAuthenticated">
+        You are not logged in!
+    </div>
+    <div v-if="authStore.user.username">
+        Username: {{ authStore.user.username }}
+    </div>
+    <div v-if="authStore.user.email">
+        Email: {{ authStore.user.email }}
+    </div>
     <div v-if="errorMsg">
         Error message: {{ errorMsg }}
     </div>
