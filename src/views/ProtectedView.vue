@@ -18,7 +18,6 @@ const handleData = async () => {
 
 <template>
     This is the protected page
-    This is the profile page <br>
     <div v-if="errorMsg">
         Error message: {{ errorMsg }}
     </div>
