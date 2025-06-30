@@ -6,15 +6,15 @@ import PageTitle from './components/PageTitle.vue';
 
 const authStore = useAuthStore()
 authStore.initialize()
-
 </script>
 
 <template>
-  <PageTitle title="My App"/>
+  <PageTitle title="My App" />
   <HeaderComponent>
     <h1 class="text-[30px]">MyApp</h1>
     <nav class="text-[25px] flex justify-between w-[550px]">
       <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/modal">Modal</RouterLink>
       <RouterLink to="/register">Register</RouterLink>
       <RouterLink to="/login">Login</RouterLink>
       <RouterLink to="/profile">Profile</RouterLink>
@@ -27,6 +27,9 @@ authStore.initialize()
         <component :is="Component" />
       </keep-alive>
     </router-view>
+
+    <router-view name="modal"></router-view>
+
   </main>
 </template>
 

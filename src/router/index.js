@@ -7,6 +7,14 @@ import ProtectedView from '@/views/ProtectedView.vue'
 import NotFound from '@/views/NotFound.vue'
 import { useAuthStore } from '@/stores/auth'
 
+function keepDefaultView(to, from) {
+  if (from.matched.length) {
+    to.matched[0].components.default = from.matched[0].components.default;
+  } else {
+    to.matched[0].components.default = HomeView;
+  }
+}
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -23,7 +31,11 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginView,
+      components: {
+        modal: LoginView,
+      },
+      props: {show: true},
+      beforeEnter: [keepDefaultView],
     },
     {
       path: '/profile',
@@ -52,15 +64,15 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
     await authStore.initialize()
     if (!authStore.isAuthenticated) {
-      next('/login');
-      console.log(authStore.isAuthenticated)
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      });
     } else {
       next();
-      console.log(authStore.isAuthenticated)
     }
   } else {
     next();
-    console.log(authStore.isAuthenticated)
   }
 });
 

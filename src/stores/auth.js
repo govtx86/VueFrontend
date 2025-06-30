@@ -12,7 +12,6 @@ export const useAuthStore = defineStore('auth', () => {
   const csrfToken = ref(null)
 
   async function initialize() {
-    console.log("init func")
     const { cookies } = useCookies()
     csrfToken.value = cookies.get("csrf_token")
     try {
