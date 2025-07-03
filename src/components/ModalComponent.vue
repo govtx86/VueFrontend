@@ -1,17 +1,7 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router'
+const emit = defineEmits(['buttonClick', 'extraButtonClick']);
 
-const route = useRoute()
-const router = useRouter()
-
-
-const onSave = () => {
-    if (route.query.redirect) {
-        router.push(route.query.redirect)
-    } else {
-        router.push("/")
-    }
-}
+const { buttonText, extraButtonText } = defineProps(['buttonText', 'extraButtonText'])
 </script>
 
 <template>
@@ -22,8 +12,14 @@ const onSave = () => {
                 <div
                     class="modal-container w-[300px] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.33)] transition-all duration-[0.3s] ease-[ease] m-auto px-[30px] py-5 rounded-sm">
                     <slot></slot>
-                    <button class="modal-default-button float-right border-1 rounded-[3px]"
-                        @click="onSave">Close</button>
+                    <div>
+                        <button v-if="extraButtonText" class="modal-extra-button float-left border-1 rounded-[3px]"
+                            @click="emit('extraButtonClick')">{{
+                                extraButtonText }}</button>
+                        <button class="modal-default-button float-right border-1 rounded-[3px]"
+                            @click="emit('buttonClick')">{{
+                                buttonText }}</button>
+                    </div>
                 </div>
             </div>
         </Transition>

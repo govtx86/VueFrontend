@@ -8,6 +8,10 @@ const user = ref({
     password: "",
 });
 
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
 const authStore = useAuthStore()
 const errorMsg = ref(null);
 const respMsg = ref(null);
@@ -17,13 +21,13 @@ let shouldContinue = false;
 const handleLogin = async () => {
     try {
         const response = await authStore.login(user.value)
-        respMsg.value = response.data;
+        respMsg.value = capitalize(response.data);
         if (response.status == 200) {
             shouldContinue = true;
         }
         errorMsg.value = null;
     } catch (error) {
-        errorMsg.value = error;
+        errorMsg.value = capitalize(error.response.data.error);
     }
 }
 
@@ -34,7 +38,7 @@ const onSave = () => {
     if (shouldContinue && route.query.redirect) {
         router.push(route.query.redirect)
     } else {
-        router.push("/")
+        router.go(-1)
     }
 }
 </script>
@@ -47,8 +51,8 @@ const onSave = () => {
                 <div
                     class="modal-container w-[300px] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.33)] transition-all duration-[0.3s] ease-[ease] m-auto px-[30px] py-5 rounded-sm">
                     <p>Login:</p>
-                    <div v-if="errorMsg">
-                        Error message: {{ errorMsg }}
+                    <div v-if="errorMsg" class="bg-red-500 rounded-[5px]">
+                        {{ errorMsg }}
                     </div>
                     <div v-if="respMsg">
                         Response message: {{ respMsg }}

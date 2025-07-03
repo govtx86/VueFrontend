@@ -6,6 +6,9 @@ import ProfileView from '@/views/ProfileView.vue'
 import ProtectedView from '@/views/ProtectedView.vue'
 import NotFound from '@/views/NotFound.vue'
 import { useAuthStore } from '@/stores/auth'
+import EditorView from '@/views/EditorView.vue'
+import PostListView from '@/views/PostListView.vue'
+import PostView from '@/views/PostView.vue'
 
 function keepDefaultView(to, from) {
   if (from.matched.length) {
@@ -24,9 +27,28 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/editor',
+      name: 'editor',
+      component: EditorView,
+    },
+    {
+      path: '/posts',
+      name: 'posts',
+      component: PostListView,
+    },
+    {
+      path: '/post/:id',
+      name: 'post',
+      component: PostView,
+      props: true,
+    },
+    {
       path: '/register',
       name: 'register',
-      component: RegisterView,
+      components: {
+        modal: RegisterView,
+      },
+      beforeEnter: [keepDefaultView],
     },
     {
       path: '/login',
@@ -34,7 +56,6 @@ const router = createRouter({
       components: {
         modal: LoginView,
       },
-      props: {show: true},
       beforeEnter: [keepDefaultView],
     },
     {
